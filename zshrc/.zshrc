@@ -26,9 +26,8 @@ alias dcu='docker compose up'
 alias dcud='docker compose up -d'
 alias dcd='docker compose down'
 alias dcdv='docker compose down -v'
-alias lsal='ls -al'
-alias ls='eza -al --icons=always'
-alias lst='eza -al -T --icons=always'
+alias lal='eza -al --icons=always'
+alias lat='eza -al -T --icons=always'
 
 source $ZSH/oh-my-zsh.sh
 
