@@ -66,7 +66,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 // You can configure outputs by their name, which you can find
@@ -105,23 +105,33 @@ input {
     // automatically.
     position x=1280 y=0
 }
+
 output "DP-1" {
+  variable-refresh-rate
+  focus-at-startup
   position x=0 y=0
 }
+
 output "DP-2" {
   scale 1.25
   position x=2560 y=-600
   transform "270"    
-  // This should become available from next release
-  // // Layout config overrides just for this output.
-  //   layout {
-  //       default-column-width { proportion 1.0; }
-  //       // ...any other setting.
-  //   }
+    // Layout config overrides just for this output.
+    layout {
+      always-center-single-column
+      default-column-width { 
+          proportion 1.0; 
+      }    
+      preset-column-widths {
+          proportion 1.0    
+      }
+      preset-window-heights {
+          proportion 1.0
+      }
+    }
 }
 
 cursor {
-    // xcursor-theme "capitaine_cursors"
     xcursor-theme "capitaine-cursors"
     xcursor-size 32
 
@@ -134,7 +144,7 @@ cursor {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 16
+    gaps 32
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -149,10 +159,9 @@ layout {
         // Proportion sets the width as a fraction of the output width, taking gaps into account.
         // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
         // The default preset widths are 1/3, 1/2 and 2/3 of the output.
-        proportion 0.33333
+        // proportion 0.35
         proportion 0.5
-        proportion 0.66667
-        proportion 0.90
+        proportion 0.75
 
         // Fixed sets the width in logical pixels exactly.
         // fixed 1920
@@ -280,10 +289,10 @@ layout {
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
     struts {
-        // left 64
-        // right 64
-        // top 64
-        // bottom 64
+        // left 16
+        // right 16
+        // top 16
+        // bottom 16
     }
 }
 
@@ -343,13 +352,14 @@ window-rule {
     default-column-width {}
 }
 
-// Open the Firefox pictalacrittyure-in-picture player as floating by default.
 window-rule {
-    // This app-id regular expression will work for both:
-    // - host Firefox (app-id is "firefox")
-    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    open-fullscreen true
+}
+
+window-rule {
+    match app-id="dota2"
+    open-on-output "DP-1"
 }
 
 // Open the Zen pictalacrittyure-in-picture player as floating by default.
@@ -376,15 +386,27 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-    geometry-corner-radius 12
+    geometry-corner-radius 18
     clip-to-geometry true
 }
 
 // make windows transparent
 window-rule {
-  // match is-active=false // make only inactive windows trnasparent
-  opacity 0.93
+  match is-active=false // make only inactive windows trnasparent
+  opacity 0.92
   draw-border-with-background false // needed if all windows are transparent
+// blur {
+//     // off
+//     passes 3
+//     offset 3.0
+//     noise 0.02
+//     saturation 1.5
+// }
+//   // this is not there yet
+//   background-effect {
+//     blur true
+//     xray false
+//   }
 }
 
 binds {
@@ -609,12 +631,12 @@ binds {
     // * adjust width as a percentage of screen width: "-10%" or "+10%"
     // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
     // set-column-width "100" will make the column occupy 200 physical screen pixels.
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
+    Mod+Minus { set-column-width "-20%"; }
+    Mod+Equal { set-column-width "+20%"; }
 
     // Finer height adjustments when in column with other windows.
-    Mod+Shift+Minus { set-window-height "-10%"; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
+    Mod+Shift+Minus { set-window-height "-20%"; }
+    Mod+Shift+Equal { set-window-height "+20%"; }
 
     // Move the focused window between the floating and the tiling layout.
     Mod+V       { toggle-window-floating; }
